@@ -1,18 +1,25 @@
 #!/usr/bin/env perl
-my %data; #this is the main data structure
+system("clear");
+use Cwd qw(realpath);
+use Data::Dumper;
+my $bin_path = realpath($0);
+$bin_path =~ s/(.*\/)[^\/]*/$1/;
+our $lib_path = "${bin_path}modules/";
+use lib $lib_path ;
+our %data; #this is the main data structure
 my $VERSION = 0.1;
+my $debug = 0;
 $SIG{INT} = \&destroy;
 $SIG{TERM} = \&destroy;
 sub init()	{
 	print "--TEALES UTILITY V:$VERSION--\n";
-	print "CONFIG options:\n";
-
+	print "--Configuring--\n" if $debug;
 	$data{config}{cleanup} = 0;#0 or 1	
 	$data{config}{work_folder} = "/tmp/work";	
 	$data{config}{output_file} = time().".out";	
-
+	print "--CONFIG options:--\n";
 	for (keys %data{config})	{
-		print "$_: $data{config}{$_}\n";
+		print "[*] - $_: $data{config}{$_}\n";
 	}
 	return 0;
 }
@@ -40,12 +47,38 @@ exit();
 }
 
 sub main()	{
-	print "This is where the main loop runs\n";
-return 0;
+	print "Please type your option below:\n";
+	for (keys %data{modules})	{
+		print "$data{modules}{$_}{option} : $_\n"
+	}
+	print "your choice >";
+	my $module = <STDIN>;
+	my $choice_validity = 0;
+	chomp $module;
+	for (keys %data{modules})	{
+		if ($module =~ /$data{modules}{$_}{option}/)	{
+			print "you chose $_ by pressing $module!\n";
+			$choice_validity ++;
+			$start_function = '&modules::'.$_.'::start()';
+			eval $start_function;
+			last;
+		}
+	}
+	print "you must have chose an invalid option\n" unless $choice_validity >=1;	
 }
 
 
 init();
+print "--Loading Modules--\n";
+if (-e "$bin_path/modules")	{
+	require modules::ip_lookup;
+	require modules::quit;
+} else {
+	die "error loading modules";
+}
 setup();
-main();
+modules::ip_lookup::init();
+modules::quit::init();
+while (1)	{main();}
+print Dumper(%data)." is quite the data. bye!\n" if $debug;
 destroy();
