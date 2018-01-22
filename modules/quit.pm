@@ -1,7 +1,7 @@
 package modules::quit;
 print "[+] - loading module quit\n";
 sub init 	{
-	$main::data{modules}{quit}{option} = "Q";
+	$main::data{modules}{quit}{option} = "q";
 }
 sub start	{
 	if ($main::debug == 1)	{

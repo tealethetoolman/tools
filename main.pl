@@ -17,9 +17,13 @@ sub init()	{
 	$data{config}{cleanup} = 0;#0 or 1	
 	$data{config}{work_folder} = "/tmp/work";	
 	$data{config}{output_file} = time().".out";	
-	print "--CONFIG options:--\n";
-	for (keys %data{config})	{
-		print "[*] - $_: $data{config}{$_}\n";
+	print "--Loading Modules--\n";
+	if (-e "$bin_path/modules")	{
+		require modules::ip_lookup;
+		require modules::quit;
+		require modules::otx_key;
+	} else {
+		die "error loading modules";
 	}
 	return 0;
 }
@@ -34,6 +38,10 @@ sub setup()	{
 		mkdir $data{config}{work_folder};
 	} else	{
 		mkdir $data{config}{work_folder};
+	}
+	print "--CONFIG options:--\n";
+	for (keys %data{config})	{
+		print "[*] - $_: $data{config}{$_}\n";
 	}
 }
 #this is the subroutine the we use to bring down the program at the end. cleans up. This will be put in a signal handler
@@ -59,7 +67,7 @@ sub main()	{
 		if ($module =~ /$data{modules}{$_}{option}/)	{
 			print "you chose $_ by pressing $module!\n" if $debug ==1;
 			$choice_validity ++;
-			$start_function = '&modules::'.$_.'::start()';
+			my $start_function = '&modules::'.$_.'::start()';
 			eval $start_function;
 			last;
 		}
@@ -69,16 +77,10 @@ sub main()	{
 
 
 init();
-print "--Loading Modules--\n";
-if (-e "$bin_path/modules")	{
-	require modules::ip_lookup;
-	require modules::quit;
-} else {
-	die "error loading modules";
-}
 setup();
 modules::ip_lookup::init();
 modules::quit::init();
+modules::otx_key::init();
 while (1)	{main();}
 print Dumper(%data)." is quite the data. bye!\n" if $debug;
 destroy();
