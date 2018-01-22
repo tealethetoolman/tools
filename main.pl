@@ -57,7 +57,7 @@ sub main()	{
 	chomp $module;
 	for (keys %data{modules})	{
 		if ($module =~ /$data{modules}{$_}{option}/)	{
-			print "you chose $_ by pressing $module!\n";
+			print "you chose $_ by pressing $module!\n" if $debug ==1;
 			$choice_validity ++;
 			$start_function = '&modules::'.$_.'::start()';
 			eval $start_function;
