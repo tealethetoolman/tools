@@ -1,14 +1,16 @@
 package modules::otx_key;
-print "[+] - loading module OTX_key\n";
+print " [+] - loading module OTX_key\n" if $main::debug;
 sub check_key_exists	{
 	if ( -e $main::data{config}{otx_key_file} )	{
-		print "[*] - OTX key file exists\n" if $main::debug;
+		print "[+] - OTX key file exists\n" if $main::debug;
 		return 1;
 	} else {
+		print "[-] - OTX key file does not exist\n" if $main::debug;
 		return 0;
 	}
 }
 sub load_key	{
+	print "[*] - Loading OTX key\n";
 	print "[-] - No OTX key available\n" unless (&check_key_exists());
 	return unless (-e $main::data{config}{otx_key_file});
 	open( OTX_KEY_FILE, "<", $main::data{config}{otx_key_file} ) or die "couldn't open otx keyfile";
@@ -24,7 +26,6 @@ sub get_key	{
 sub init	{
 	$main::data{modules}{otx_key}{option} = 'O';
 	$main::data{config}{otx_key_file} = $ENV{"HOME"}."/.otx.api.key";
-	&load_key();
 }
 sub create_key	{
         unless ( check_key_exists() )  {
@@ -55,3 +56,4 @@ sub start	{
 	}
         return;
 }
+return 1;

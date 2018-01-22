@@ -1,5 +1,5 @@
 package modules::quit;
-print "[+] - loading module quit\n";
+print " [+] - loading module quit\n";
 sub init 	{
 	$main::data{modules}{quit}{option} = "q";
 }

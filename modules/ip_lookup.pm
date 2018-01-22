@@ -1,19 +1,36 @@
 package modules::ip_lookup;
-print "[+] - loading module ip_lookup\n";
+print " [+] - loading module ip_lookup\n";
 sub init {
-	$main::data{modules}{ip_lookup}{option} = 'I';
+	$main::data{modules}{ip_lookup}{option} = 'i';
 }
 sub start	{
-	print "[--] - Loaded ip_lookup\n";
-	unless ( -e $ENV{"HOME"}."/.otx.api.key" )  {
-		print "you need to set up the file ".$ENV{"HOME"}."/.otx.api.key\n";
-		print "OTX API KEY:>";
-		my $otx_api_key = <STDIN>;
-		chomp $otx_api_key;
-		print "you have entered this as a key -> $otx_api_key\n";
-		open (OTX_KEY_FILE, '>', $ENV{"HOME"}."/.otx.api.key") or die "could not open $!";
-		print OTX_KEY_FILE $otx_api_key;
-		close OTX_KEY_FILE;
+	print "[*] - Starting ip_lookup\n";
+	print "[+] - OTX key is available\n" if &modules::otx_key::check_key_exists();
+	return &menu;
+}
+sub menu	{
+	my $exit_flag = 0;
+	while ($exit_flag == 0)	{
+		print "[=] - ------------------------------\n";
+		print "[M] - OTX Menu ---------------------\n";
+		print "[=] - ------------------------------\n";
+		print "	[a] - Activate OTX\n";
+		print "	[s] - Speedtest\n";
+		print "	[i] - Get IP\n";
+		print "	[q] - Exit\n";
+		print "[?] - >";
+		my $choice = <STDIN>;
+		chomp $choice;
+		if ($choice =~ /s/) {
+			modules::otx::speed_test();
+		}	elsif ($choice =~ /i/)	{
+			modules::otx::get_ip_tealeus();
+		}	elsif ($choice =~ /a/)	{
+			modules::otx::start();
+		}	elsif ($choice =~ /q/)	{
+			$exit_flag++;
+		} else	{
+			print "[X] - not implemented";
+		}
 	}
-	return;
 }
