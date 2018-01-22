@@ -1,0 +1,49 @@
+{
+   "abstract" : "Perl extension interface for libcurl",
+   "author" : [
+      "Cris Bailiff <c.bailiff+curl at devsecure.com>",
+      "Balint Szilakszi <szbalint at cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Install version 0.91, CPAN::Meta::Converter version 2.150001",
+   "license" : [
+      "mit"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "WWW-Curl",
+   "no_index" : {
+      "directory" : [
+         "inc",
+         "t",
+         "template"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.42"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "repository" : {
+         "url" : "https://github.com/szbalint/WWW--Curl"
+      }
+   },
+   "version" : "4.17",
+   "x_module_name" : "WWW::Curl"
+}
