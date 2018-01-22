@@ -1,1 +1,32 @@
-this is my app.
+NAME
+	toolman - an interactive application to do common taks.
+
+SYNOPSIS
+
+	perl ./main.pl
+
+TERMS	
+		OTX: AlienVault Open Threat Exchange
+
+Description:
+	toolman is an app that is currently run by main.pl. I'm working on better modularizing the different components, but right now it works. This utility has the following functions:
+		*The ability to quit
+		*Interactive menus
+		*OTX key and file management
+		*OTX request module
+		*Simple configuration interface
+		*Cleanup and Garbage Collection
+
+FUTURE
+
+	I have some plans for this app. For one, I want to modularize the display system and the logging system. Here is a list of the upcoming features and their priorities.
+
+	NAME				Priority
+	Display Module			10
+	Logging Module			7
+	Core Module			10
+	Config Module
+	Web Module			10
+	JSON Parsing Ability		10
+
+If you need to contact me: irc.teale.us #home
