@@ -1,11 +1,15 @@
 package modules::ip_lookup;
-print " [+] - loading module ip_lookup\n";
+use modules::display;
+ouut ( message => "loading ip_lookup", tab => 1, logo => '+', source => "module::ip_lookup" );
 sub init {
-	$main::data{modules}{ip_lookup}{option} = 'i';
+        $main::data{menu}{main}{ip_lookup} =    {
+                option => "i",
+                name => "IP_LOOKUP",
+                description => "use this to look at your IP address"
+        };
 }
 sub start	{
-	print "[*] - Starting ip_lookup\n";
-	print "[+] - OTX key is available\n" if &modules::otx_key::check_key_exists();
+	ouut ( message => "Starting ip_lookup",source => "module::ip_lookup" );
 	return &menu;
 }
 sub menu	{

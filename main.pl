@@ -66,28 +66,11 @@ sub destroy()	{
 }
 
 sub main()	{
-	print "[M] - Main Menu\n";
-	for (keys %data{modules})	{
-		print " [$data{modules}{$_}{option}] - $_\n"
-	}
-	print "[?] - >";
-	my $module = <STDIN>;
-	my $choice_validity = 0;
-	chomp $module;
-	for (keys %data{modules})	{
-		if ($module =~ /$data{modules}{$_}{option}/)	{
-			print "[*] - you chose $_ by pressing $module!\n" if $debug ==1;
-			$choice_validity ++;
-			my $start_function = '&modules::'.$_.'::start()';
-			eval $start_function;
-			last;
-		}
-	}
-	print "[X] - Invalid Module\n" unless $choice_validity >=1;	
+	ouut_menu($data{menu}{main});
 }
 
 
 init();
 setup();
-while (1)	{main();}
+main();
 destroy();

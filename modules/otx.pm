@@ -1,9 +1,14 @@
 package modules::otx;
+use modules::display;
 use WWW::Curl::Easy;
 use Time::HiRes qw ( time );
 print " [+] - loading module OTX\n";
 sub init	{
-	$main::data{modules}{otx}{option} = 'X';
+        $main::data{modules}{otx} =    {
+                option => "x",
+                name => "OTX",
+                description => "use this to configure otx"
+        };
 }
 sub start	{
 	print "[*] - Starting OTX\n";

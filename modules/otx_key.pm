@@ -24,7 +24,11 @@ sub get_key	{
 	return $main::data{config}{otx_key};
 }
 sub init	{
-	$main::data{modules}{otx_key}{option} = 'O';
+	$main::data{menu}{main}{otx_key}   =       {
+        	option => "O",
+        	name => "OTX KEY TOOL",
+        	description => "Module for configuring your OTX api key",
+	};
 	$main::data{config}{otx_key_file} = $ENV{"HOME"}."/.otx.api.key";
 }
 sub create_key	{
