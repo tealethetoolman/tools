@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
-system("clear");
+my $debug = 1;
+my $VERSION = 0.1;
 use Cwd qw(realpath);
 use Data::Dumper;
 my $bin_path = realpath($0);
@@ -7,24 +8,26 @@ $bin_path =~ s/(.*\/)[^\/]*/$1/;
 our $lib_path = "${bin_path}modules/";
 use lib $lib_path ;
 our %data; #this is the main data structure
-my $VERSION = 0.1;
-my $debug = 0;
+ouut_clear();
+use modules::display ;
+ouut_line();
+ouut_string("|---------------------------TEALES UTILITY v:$VERSION-------------------------------[]");
+ouut_line();
 $SIG{INT} = \&destroy;
 $SIG{TERM} = \&destroy;
 sub init()	{
-	print "--TEALES UTILITY V:$VERSION--\n";
-	print "[*] - Configuring\n" if $debug;
+	ouut(message => "Initializing", source => 'main::init', severity => 'debugv', logo => '*');
 	$data{config}{cleanup} = 0;#0 or 1	
 	$data{config}{work_folder} = "/tmp/work";	
 	$data{config}{output_file} = time().".out";	
-	print "[*] - Loading Modules --\n";
+	ouut(message => "Loading Modules", source => 'main::init', severity => 'debug', logo => '*');
 	if (-e "$bin_path/modules")	{
 		require modules::quit;
 		require modules::otx_key;
 		require modules::otx;
 		require modules::ip_lookup;
 	} else {
-		die "error loading modules";
+		ouut(message => "Modules Path not found. Dying", source => 'main::init', severity => 'error', logo => 'X') and destroy();
 	}
 	modules::quit::init();
 	modules::otx_key::init();
@@ -34,7 +37,7 @@ sub init()	{
 }
 
 sub setup()	{
-	print "[*] - Setting up work directory\n" if $debug;
+	ouut(message => "Setting up Main Stack", source => 'main::setup', severity => 'debug', logo => '*');
 	if ($data{config}{cleanup} == 1 and -e $data{config}{work_folder})	{
 		rmdir $data{config}{work_folder} or warn "Could not delete the workdir $!\n";
 		mkdir $data{config}{work_folder};
@@ -44,21 +47,22 @@ sub setup()	{
 	} else	{
 		mkdir $data{config}{work_folder};
 	}
-	print "[=]--------------------\n";
-	print "[C] - CONFIG options:\n";
+	ouut_line();
+	ouut(message => "CONFIGURATIONS:", source => 'main::setup', severity => 'debug', logo => 'C');
 	for (keys %data{config})	{
-		print " [>] - $_: $data{config}{$_}\n";
+		ouut(message => "$_: $data{config}{$_}", source => ' ', severity => 'debug', logo => '>', tab => 1);
 	}
-	print "[=]--------------------\n";
+	ouut_line();
 }
 #this is the subroutine the we use to bring down the program at the end. cleans up. This will be put in a signal handler
 sub destroy()	{
-	print "Destroying Workspace\n";
+	ouut(message => "Destroying Workspace ".shift, source => 'main::destroy', severity => 'error', logo => 'X', tab => 3);
 	if($data{config}{cleanup} == 1 )	{
-		print "Deleting workdir\n";
+	ouut(message => "Deleting workdir ", source => 'main::destroy', severity => 'error', logo => 'X', tab => 4 );
 		rmdir $data{config}{work_folder} or warn "Could not delete the workdir $!\n";
 	}
-exit();
+	undef %data;
+	exit();
 }
 
 sub main()	{
@@ -86,5 +90,4 @@ sub main()	{
 init();
 setup();
 while (1)	{main();}
-print Dumper(%data)." is quite the data. bye!\n" if $debug;
 destroy();

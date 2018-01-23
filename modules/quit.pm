@@ -1,5 +1,6 @@
 package modules::quit;
-print " [+] - loading module quit\n";
+use modules::display;
+ouut ( message => "loading module quit", tab => 1, logo => '+', severity => "debug", source => "module::quit", color => 'default' );
 sub init 	{
 	$main::data{modules}{quit}{option} = "q";
 }
@@ -17,3 +18,4 @@ sub start	{
 		&main::destroy;
 	}
 }
+1;
