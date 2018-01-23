@@ -66,7 +66,7 @@ sub destroy()	{
 }
 
 sub main()	{
-	ouut_menu($data{menu}{main});
+	ouut_menu('main');
 }
 
 

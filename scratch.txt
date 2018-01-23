@@ -1,0 +1,73 @@
+Trying to figure out how a hash is pased around and how to get to the bottom of it.
+
+this is from modules::display
+
+
+main.pl
+
+our %data;
+use Module::Diplay qw( ouut_menu );
+&ouut_menu('main');
+
+
+package Module::Display
+sub ouut_menu   {
+        my $which_menu = shift;
+        for (keys $main::data{menu}{$which_menu})       {
+
+                ouut(message=> "--> ".Dumper($main::data)." <--",source=>'display::out_menu', logo=>'X');
+		#| [X] - 1516750117 - debug - display::out_menu -> --> $VAR1 = undef;
+
+                ouut(message=> "--> ".Dumper($main::data{menu})." <--",source=>'display::out_menu', logo=>'X');
+		#| [X] - 1516750117 - debug - display::out_menu -> --> $VAR1 = {
+		#          'main' => {
+		#                      'ip_lookup' => {
+		#                                       'description' => 'use this to look at your IP address',
+		#                                       'name' => 'IP_LOOKUP',
+		#                                       'option' => 'i'
+		#                                     },
+		#                      'otx_key' => {
+		#                                     'description' => 'Module for configuring your OTX api key',
+		#                                     'name' => 'OTX KEY TOOL',
+		#                                     'option' => 'O'
+		#                                   },
+		#                      'display' => {
+		#                                     'description' => 'Module for configuring display and looking at runtime variables',
+		#                                     'name' => 'DISPLAY',
+		#                                     'option' => 'd'
+		#                                   }
+		#                    }
+		#        };
+
+                ouut(message=> "--> ".Dumper($main::data{menu}{$which_menu})." <--",source=>'display::out_menu', logo=>'X');
+		#| [X] - 1516750117 - debug - display::out_menu -> --> $VAR1 = {
+		#          'ip_lookup' => {
+		#                           'description' => 'use this to look at your IP address',
+		#                           'name' => 'IP_LOOKUP',
+		#                           'option' => 'i'
+		#                         },
+		#          'otx_key' => {
+		#                         'description' => 'Module for configuring your OTX api key',
+		#                         'name' => 'OTX KEY TOOL',
+		#                         'option' => 'O'
+		#                       },
+		#          'display' => {
+		#                         'description' => 'Module for configuring display and looking at runtime variables',
+		#                         'name' => 'DISPLAY',
+		#                         'option' => 'd'
+		#                       }
+		#        };
+
+                ouut(message=> "--> ".Dumper($main::data{menu}{$which_menu}{$_})." <--",source=>'display::out_menu', logo=>'X');
+		#        'display' => {
+                #        'description' => 'Module for configuring display and looking at runtime variables',
+                #        'name' => 'DISPLAY',
+                #         'option' => 'd'
+                #       }
+
+		ouut(message=> "--> ".Dumper($main::data{menu}{$which_menu}{$_}{option})." <--",source=>'display::out_menu', logo=>'X');
+		#| [X] - 1516750117 - debug - display::out_menu -> --> $VAR1 = 'd';
+
+        }
+}
+

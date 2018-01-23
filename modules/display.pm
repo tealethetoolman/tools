@@ -66,49 +66,18 @@ sub ouut_quest	{
 }
 
 sub ouut_menu 	{
-	my $input = shift;
-	for (keys $input)	{
-		$my_hash = $_;
-		print "-> ".Dumper($my_hash)." <- \n";
-	print "-> ".$my_hash." | ".$_." <- \n";
-#		for (keys $_)	{
-#			print "key: ".$_
-#		}
-#		print ",,,".$_."...\n";
+	my $which_menu = shift;
+	for (keys $main::data{menu}{$which_menu})	{
+		my $menu_item = $_;
+		for(keys $main::data{menu}{$which_menu}{$menu_item})	{
+			my $menu_item_option = $_;
+			print "Menu: $which_menu Item: $menu_item Option: $menu_item_option Value: ".$main::data{menu}{$which_menu}{$menu_item}{$menu_item_option}." \n";
+		}
 	}
-	#ouut(message => &Dumper($input), source => 'display::ouut_menu', logo => '#');	
-#        for (keys %input)       {
-#		print $_;
-#        ;	ouut(message => "problem is here ".&Dumper($input{@{$_}}{option}), source => 'display::ouut_menu', logo => '#');
-#        }
-#	for (@_)	{print $_."\n";}
-#	}
-
-#	my (%input) = @_;
-# going to use our %data structure to maintain menu hierarchies
-# the top level menu will be $data{modules}
-#        print "[M] - Main Menu\n";
-#	my $module = &ouut_quest(2);
-#	 my $module = <STDIN>;
-#        my $choice_validity = 0;
-#        chomp $module;
-#	&main::destroy if $module =~ /q/;
-#        for (keys %data{modules})       {
-#                if ($module =~ /$data{modules}{$_}{option}/)    {
-#                        print "[*] - you chose $_ by pressing $module!\n" if $debug ==1;
-#                        $choice_validity ++;
-#                        my $start_function = '&modules::'.$_.'::start()';
-#                        eval $start_function;
-#                        last;
-#                }
-#        }
-#        print "[X] - Invalid Module\n" unless $choice_validity >=1;
-print "sleeeping \n";
-sleep 1;
 }
 
 sub dump_config	{
-	        my (%params) = @_;
+	        my (%params) = shift;
 		print &Dumper(%params)."\n-------------\n";
 }
 1;
