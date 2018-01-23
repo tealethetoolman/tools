@@ -29,4 +29,7 @@ FUTURE
 	Web Module			10
 	JSON Parsing Ability		10
 
+NOTES	
+	right now, i only have display module going into the packages as offsets packages from main. in the rest, i use explicit scoped declarations. when I get a package other than display, i will use it. it being this http://search.cpan.org/~preaction/Import-Base-1.004/lib/Import/Base.pm which will allow me to defin my base set of packages and just include that into the packages.
+
 If you need to contact me: irc.teale.us #home
