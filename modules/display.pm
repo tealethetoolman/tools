@@ -67,12 +67,14 @@ sub ouut_quest	{
 
 sub ouut_menu 	{
 	my $which_menu = shift;
+	my $output_line;
 	for (keys $main::data{menu}{$which_menu})	{
 		my $menu_item = $_;
-		for(keys $main::data{menu}{$which_menu}{$menu_item})	{
-			my $menu_item_option = $_;
-			print "Menu: $which_menu Item: $menu_item Option: $menu_item_option Value: ".$main::data{menu}{$which_menu}{$menu_item}{$menu_item_option}." \n";
-		}
+		print "-> ".$main::data{menu}{$which_menu}{$menu_item}{option}." : ".$main::data{menu}{$which_menu}{$menu_item}{name}."\n";
+#		for(keys $main::data{menu}{$which_menu}{$menu_item})	{
+#			my $menu_item_option = $_;
+#			print "Menu: $which_menu Item: $menu_item Option: $menu_item_option Value: ".$main::data{menu}{$which_menu}{$menu_item}{$menu_item_option}." \n";
+#		}
 	}
 }
 
