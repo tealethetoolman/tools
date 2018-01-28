@@ -3,13 +3,19 @@ my $debug = 1;
 my $VERSION = 0.1;
 use Cwd qw(realpath);
 use Data::Dumper;
-my $bin_path = realpath($0);
-$bin_path =~ s/(.*\/)[^\/]*/$1/;
-our $lib_path = "${bin_path}modules/";
+my $bin_path;
+my $lib_path;
+BEGIN	{
+	$bin_path = realpath($0);
+	$bin_path =~ s/(.*\/)[^\/]*/$1/; 
+#	print "bin path is ". $bin_path ."\n";
+	$lib_path = "${bin_path}modules/";
+#	print "lib path is ". $lib_path ."\n";
+}
 use lib $lib_path ;
 our %data; #this is the main data structure
-ouut_clear();
 use modules::display ;
+ouut_clear();
 ouut_line();
 ouut_string("|---------------------------TEALES UTILITY v:$VERSION-------------------------------[]");
 ouut_line();
@@ -56,7 +62,7 @@ sub setup()	{
 }
 #this is the subroutine the we use to bring down the program at the end. cleans up. This will be put in a signal handler
 sub destroy()	{
-	ouut(message => "Destroying Workspace ".shift, source => 'main::destroy', severity => 'error', logo => 'X', tab => 3);
+	ouut(message => "Destroying Workspace" , source => 'main::destroy', severity => 'error', logo => 'X', tab => 3);
 	if($data{config}{cleanup} == 1 )	{
 	ouut(message => "Deleting workdir ", source => 'main::destroy', severity => 'error', logo => 'X', tab => 4 );
 		rmdir $data{config}{work_folder} or warn "Could not delete the workdir $!\n";

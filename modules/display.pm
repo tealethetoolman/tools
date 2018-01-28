@@ -1,8 +1,7 @@
 package modules::display;
 use Exporter 'import';
 use Data::Dumper;
-
-&ouut( source => 'display', message => "loading module", tab => 1, severity => 'debug' );
+print "[*] loading display module.\n";
 @EXPORT = qw(ouut ouut_string ouut_menu ouut_line ouut_clear ouut_title ouut_quest);
 $main::data{menu}{main}{display}	=	{
 	option => "d",
@@ -26,7 +25,6 @@ sub ouut	{
 
 #here is some screen sizing magic
 	my (%params) = @_;
-	my $output_line = "| ";
 	my %san_input =	(
 		color => ($params{color}||"white"),
 		logo  =>($params{logo}||"*") ,
@@ -35,15 +33,43 @@ sub ouut	{
 		source  => ($params{source}||"Anonymous"), 
 		tab  => ($params{tab}||0)
 	);
-	my $decorations_size = 4 + $san_input{tab} + 6; # sizing math. 4 = "| " on beginning and "[]" on end plus tabs + 6 which is the spacing incurred by logo + space
-	while ( $san_input{tab} > 0)	{
-		$output_line .= " ";
-		$san_input{tab} --;
+	my $output;
+	my $tabs_out;
+	my $decoration_pre_1 = " [".$san_input{logo}."] - ";
+	my $decoration_pre_2 = " >|";
+	my $decoration_post  = "[]";
+	my $tabs = $san_input{tab};
+	while ( $tabs > 0)	{
+		$tabs_out .= " ";
+		$tabs --;
 	}
-	my $line = time()." - ".$san_input{severity}." - ".$san_input{source}." -> ".$san_input{message};
-	$output_line .="[".$san_input{logo}."] - ".$line."\n";
-	print $output_line;
-	
+	my $available_size_line_1 = $main::data{config}{screen_width} - (length($tabs_out) + length($decoration_pre_1) + length($decoration_post));
+	my $available_size_line_2 = $main::data{config}{screen_width} - (length($tabs_out) + length($decoration_pre_2) + length($decoration_post));
+	$output = time()." - ".$san_input{severity}." - ".$san_input{source}." -> ".$san_input{message};
+	print "tabs out =|".$tabs_out."|\n";
+	print "decorations pre 1 ".$decoration_pre_1."\n";
+	print "decorations pre 2 ".$decoration_pre_2."\n";
+	print "decorations post ".$decoration_post."\n";
+	print "available size first line ". $available_size_line_1 ."\n";
+	print "available size next lines ". $available_size_line_2 . "\n";
+	print "full output: ". $output . "\n";
+	print "output size: ". length($output) . "\n";
+	sleep 10;
+	if (length($output) > $available_size_line_1)	{
+		$output =~ s/^(.{$available_size_line_1})//;
+		print "just regexed the first oversized line. the output is : ".$1."\n";
+		print $tabs_out.$decoration_pre_1.$1.$decoration_post."\n";
+	sleep 10;
+#		while ((length($output) >= $available_size_line_2) and length($output) != 0)	{
+		while (length($output) > 0)	{
+			$output =~ s/^(.{$available_size_line_2})//;
+			print "just regexed the next line. out put is: ".$1."\n and the remaining size is ". length($output) . "\n";
+			print $tabs_out.$decoration_pre_2.$1.$decoration_post."\n";
+			sleep 10;
+		}
+	} else	{
+		print $tabs_out.$decoration_pre_1.$output.$decoration_post."\n";
+	}
 }
 
 sub ouut_clear	{
