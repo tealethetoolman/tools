@@ -54,18 +54,18 @@ sub ouut	{
 	print "available size next lines ". $available_size_line_2 . "\n";
 	print "full output: ". $output . "\n";
 	print "output size: ". length($output) . "\n";
-	sleep 10;
+	sleep 2;
 	if (length($output) > $available_size_line_1)	{
-		$output =~ s/^(.{$available_size_line_1})//;
+		$output =~ s/^(.{1,$available_size_line_1})//;
 		print "just regexed the first oversized line. the output is : ".$1."\n";
 		print $tabs_out.$decoration_pre_1.$1.$decoration_post."\n";
-	sleep 10;
+	sleep 2;
 #		while ((length($output) >= $available_size_line_2) and length($output) != 0)	{
 		while (length($output) > 0)	{
-			$output =~ s/^(.{$available_size_line_2})//;
+			$output =~ s/^(.{1,$available_size_line_2})//;
 			print "just regexed the next line. out put is: ".$1."\n and the remaining size is ". length($output) . "\n";
 			print $tabs_out.$decoration_pre_2.$1.$decoration_post."\n";
-			sleep 10;
+			sleep 2;
 		}
 	} else	{
 		print $tabs_out.$decoration_pre_1.$output.$decoration_post."\n";
