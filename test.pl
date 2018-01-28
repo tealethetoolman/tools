@@ -5,8 +5,8 @@ my $screen_size = 10;
 if (length($text) > $screen_size)	{
 	$text =~ s/^(.{$screen_size})//;
 	print "---> ".$1."\n";
-	while (length($text) >= $screen_size)	{
-		$text =~ s/^(.{$screen_size})//;
+	while (length($text) > 0)	{
+		$text =~ s/^(.{1,$screen_size})//;
 		print $1."\n";
 	}
 }
