@@ -1,15 +1,15 @@
 package modules::ip_lookup;
 use modules::display;
 ouut ( message => "loading ip_lookup", tab => 1, logo => '+', source => "module::ip_lookup" );
-sub init {
-        $main::data{menu}{main}{ip_lookup} =    {
-                option => "i",
-                name => "IP_LOOKUP",
-                description => "use this to look at your IP address"
-        };
-}
+$main::data{menu}{main}{ip_lookup} =    {
+    option => "i",
+    name => "IP_LOOKUP",
+    description => "use this to look at your IP address",
+    trigger => "menu",
+    module => "ip_lookup"
+};
 sub start	{
-	ouut ( message => "Starting ip_lookup",source => "module::ip_lookup" );
+	ouut ( message => "Starting ip_lookup",source => "modules::ip_lookup" );
 	return &menu;
 }
 sub menu	{
@@ -38,3 +38,5 @@ sub menu	{
 		}
 	}
 }
+
+1;

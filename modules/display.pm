@@ -101,7 +101,7 @@ sub ouut_line	{
 }
 
 sub ouut_quest	{
-	my $tab = shift;
+	my $tab = shift || 0;
 	my $output = "| ";
 	$output .= " " while $tab > 0;
 	$output .= "[?] - > ";

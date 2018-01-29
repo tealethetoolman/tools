@@ -1,0 +1,64 @@
+# to make a module in toolman app, you need a few things.
+
+# This is a perl package, so you need to make sure to define your package.
+
+package modules::package;
+
+#  First off, always include the display module first. this gives you everything you need to print to screen.
+
+use modules::display;
+
+# not inside a sub block:
+# go in and put a message that the module is loading. this also forces the structure to load.
+ouut ( message => "loading module", tab => 1, logo => '+', source => "modules::module" );
+
+# go in and register your main menu. you can do child menus as well but at least have a main menu. should point to a subroutine that has further menus.
+
+$main::data{menu}{main}{module} =    {
+    option => "x",
+    name => "MODULE",
+    description => "use this to access your module",
+    trigger => "menu", # this points at the function that has your main menu in it.
+    module => "module" # put the module name that you defined the package as. this is for building and calling the menu
+};
+
+#this is an example of a configuration menu
+$main::data{menu}{module}	=	{
+	config =>	{
+		option => "l",
+		name => "logging options",
+		description => "this is how you configure the logging verbosity",
+		trigger => "configure",
+		module => "module"
+	}
+}
+
+# now make your menu
+
+sub menu	{
+	ouut_menu("module")
+}
+
+sub config	{
+	ouut_line();
+	ouut_title("Logging config");
+	ouut("Please choose a logging level: debugv,debug,info,warn,error");
+	my $input = ouut_quest();
+	$main::data{config}{log_level} = $input if $input =~ /(debugv)|(debug)|(info)|(warn)|(error)/;
+}
+
+
+# and like always with a package...
+
+1;
+
+
+# then on your calling script with the main menu, 
+
+my %data;
+use lib "modules/";
+use modules::module;
+
+$what_next = ouut-menu("main");
+
+# still havent figured out what to do with what next, its supposed to come out as modules::module::function() so that you can just run the function with a variable name. I haven't done this yet because i got to a good stopping point where i thought making some good 
