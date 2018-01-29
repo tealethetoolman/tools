@@ -87,6 +87,7 @@ sub ouut_title	{
 	$line .= $decoration_back."\n";
 	print $line;
 }
+
 sub ouut_line	{
 	my $decoration_front = "|[]";
 	my $decoration_back  = "-[]";
@@ -134,8 +135,4 @@ sub ouut_menu_action	{
 	return $output;
 }	
 
-sub dump_config	{
-	        my (%params) = shift;
-		print &Dumper(%params)."\n-------------\n";
-}
 1;
