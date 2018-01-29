@@ -2,7 +2,7 @@ package modules::display;
 use Exporter 'import';
 use Data::Dumper;
 print "[*] loading display module.\n";
-@EXPORT = qw(ouut ouut_string ouut_menu ouut_line ouut_clear ouut_title ouut_quest);
+@EXPORT = qw(ouut ouut_string ouut_menu ouut_line ouut_clear ouut_title ouut_quest ouut_menu_action);
 $main::data{menu}{main}{display}	=	{
 	option => "d",
 	name => "DISPLAY",
@@ -19,11 +19,9 @@ sub ouut	{
 #	* color:	this is the color of the output text
 #	* logo:		this is what goes between the bracket [*]
 #	* message:	this is the message of the alert
-#	* severity: [debugv,debug,warn,error]	this is the severity of the message
+#	* severity: [debugv,debug,info,warn,error]	this is the severity of the message
 #	* source:	where this message is coming from
 #	* tab: 		this is how many spaces in front for hierarchy
-
-#here is some screen sizing magic
 	my (%params) = @_;
 	my %san_input =	(
 		color => ($params{color}||"white"),
@@ -35,40 +33,34 @@ sub ouut	{
 	);
 	my $output;
 	my $tabs_out;
-	my $decoration_pre_1 = " [".$san_input{logo}."] - ";
-	my $decoration_pre_2 = " >|";
+	my $decoration_front = "|";
+	my $decoration_pre_1 = ">[".$san_input{logo}."] - ";
+	my $decoration_pre_2 = " | > - ";
 	my $decoration_post  = "[]";
 	my $tabs = $san_input{tab};
 	while ( $tabs > 0)	{
-		$tabs_out .= " ";
+		$tabs_out .= "-";
 		$tabs --;
 	}
-	my $available_size_line_1 = $main::data{config}{screen_width} - (length($tabs_out) + length($decoration_pre_1) + length($decoration_post));
-	my $available_size_line_2 = $main::data{config}{screen_width} - (length($tabs_out) + length($decoration_pre_2) + length($decoration_post));
+	my $available_size_line_1 = $main::data{config}{screen_width} - (length($tabs_out) + length($decoration_front) + length($decoration_pre_1) + length($decoration_post));
+	my $available_size_line_2 = $main::data{config}{screen_width} - (length($tabs_out) + length($decoration_front) + length($decoration_pre_2) + length($decoration_post));
 	$output = time()." - ".$san_input{severity}." - ".$san_input{source}." -> ".$san_input{message};
-	print "tabs out =|".$tabs_out."|\n";
-	print "decorations pre 1 ".$decoration_pre_1."\n";
-	print "decorations pre 2 ".$decoration_pre_2."\n";
-	print "decorations post ".$decoration_post."\n";
-	print "available size first line ". $available_size_line_1 ."\n";
-	print "available size next lines ". $available_size_line_2 . "\n";
-	print "full output: ". $output . "\n";
-	print "output size: ". length($output) . "\n";
-	sleep 2;
 	if (length($output) > $available_size_line_1)	{
-		$output =~ s/^(.{1,$available_size_line_1})//;
-		print "just regexed the first oversized line. the output is : ".$1."\n";
-		print $tabs_out.$decoration_pre_1.$1.$decoration_post."\n";
-	sleep 2;
-#		while ((length($output) >= $available_size_line_2) and length($output) != 0)	{
+		$output =~ s/^(.{1,$available_size_line_1})//s;
+		print $decoration_front.$tabs_out.$decoration_pre_1.$1.$decoration_post."\n";
 		while (length($output) > 0)	{
-			$output =~ s/^(.{1,$available_size_line_2})//;
-			print "just regexed the next line. out put is: ".$1."\n and the remaining size is ". length($output) . "\n";
-			print $tabs_out.$decoration_pre_2.$1.$decoration_post."\n";
-			sleep 2;
+			$output =~ s/^(.{1,$available_size_line_2})//s;
+			my $this_line = $1;
+			for (1..($available_size_line_2 - length($this_line)))	{
+				$this_line .= " ";
+			}
+			print $decoration_front.$tabs_out.$decoration_pre_2.$this_line.$decoration_post."\n";
 		}
 	} else	{
-		print $tabs_out.$decoration_pre_1.$output.$decoration_post."\n";
+		for(1..($available_size_line_1 - length($output))) 	{
+			$output .= " ";
+		}
+		print $decoration_front.$tabs_out.$decoration_pre_1.$output.$decoration_post."\n";
 	}
 }
 
@@ -77,16 +69,13 @@ sub ouut_clear	{
 }
 
 sub ouut_title	{	
-	my $screen_width = 78; # this isn't the actual width, just the width that I made in ouut_line
 	my $input = shift;
-	ouut( message => "input => $input", source=>'display::ouut_title', severity => 'debugv');
-	$input =~ s/ /-/g; # replace spaces with -
+	$input =~ s/ /-/g;
+	my $decoration_front = "|[]";
+	my $decoration_back  = "-[]";
 	my $length = length($input);
-	ouut( message => "length => $input", source=>'display::ouut_title', severity => 'debugv');
-	my $filler_size = $screen_width - $input;
-	ouut( message => "screen: $screen_width math ". ($screen_width - $length ). " end ", source=>'display::ouut_title', severity => 'debugv');
-	ouut( message => "filler size: $filler_size Length: $length Screen WIdth $screen_width.....", source=>'display::ouut_title', severity => 'debugv');
-	my $line = "|-"; # ip put a single hyphen in there so that i have an equal length on both the front and back
+	my $filler_size = $main::data{config}{screen_width} - (length($input) + length($decoration_front) + length($decoration_back));
+	my $line = $decoration_front;
 	$line .= "-" if (($filler_size % 2 ) and ($filler_size --) ); #then i go and check that the length is even and add a space on the left side and subtract 1
 	for (1..($filler_size/2))	{
 		$line .= "-";
@@ -95,11 +84,19 @@ sub ouut_title	{
 	for (1..($filler_size/2))	{
 		$line .= "-";
 	}
-	$line .= "[]\n";
+	$line .= $decoration_back."\n";
 	print $line;
 }
 sub ouut_line	{
-	print "|[]-----------------------------------------------------------------------------[]\n";
+	my $decoration_front = "|[]";
+	my $decoration_back  = "-[]";
+	my $output = $decoration_front;
+	my $filler = $main::data{config}{screen_width} -(length($decoration_front) + length($decoration_back));
+	for(1..$filler)	{
+		$output .= "-";
+	}
+	$output .= $decoration_back."\n";
+	print $output;
 }
 
 sub ouut_quest	{
@@ -117,12 +114,25 @@ sub ouut_quest	{
 sub ouut_menu 	{
 	my $which_menu = shift;
 	my $output_line;
+	ouut_title("$which_menu MENU");
 	for (keys $main::data{menu}{$which_menu})	{
-		ouut_title("MAIN MENU");
 		my $menu_item = $_;
-		print "-> ".$main::data{menu}{$which_menu}{$menu_item}{option}." : ".$main::data{menu}{$which_menu}{$menu_item}{name}."\n";
+		print "|-> ".$main::data{menu}{$which_menu}{$menu_item}{option}." : ".$main::data{menu}{$which_menu}{$menu_item}{name}."\n";
 	}
 }
+
+sub ouut_menu_action	{
+	my $menu = shift;
+	my $menu_selection = shift;
+	my $output;
+	for (keys $main::data{menu}{$menu})	{
+		my $menu_item = $_;
+		if ($main::data{menu}{$menu}{$menu_item}{option} =~ $menu_selection)	{
+			$output = "module::".$menu_item."::".$main::data{menu}{$menu}{$menu_item}{trigger}; 
+		}
+	}
+	return $output;
+}	
 
 sub dump_config	{
 	        my (%params) = shift;

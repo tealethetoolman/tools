@@ -17,7 +17,7 @@ our %data; #this is the main data structure
 use modules::display ;
 ouut_clear();
 ouut_line();
-ouut_string("|---------------------------TEALES UTILITY v:$VERSION-------------------------------[]");
+ouut_title("TEALES UTILITY v:$VERSION");
 ouut_line();
 $SIG{INT} = \&destroy;
 $SIG{TERM} = \&destroy;
@@ -73,6 +73,9 @@ sub destroy()	{
 
 sub main()	{
 	ouut_menu('main');
+#	my $next_menu = ouut_quest();
+#	ouut(message => "you have selected ".$next_menu, source => "sub::main", logo => "+",severity => "info");
+	ouut(message => "you selected something that is wanting to trigger ".ouut_menu_action('main',ouut_quest()), source => "main", logo => "+");
 }
 
 
