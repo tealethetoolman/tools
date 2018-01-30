@@ -7,7 +7,9 @@ sub init	{
         $main::data{modules}{otx} =    {
                 option => "x",
                 name => "OTX",
-                description => "use this to configure otx"
+                description => "use this to configure otx",
+		trigger => "start",
+		module => "otx"
         };
 }
 sub start	{

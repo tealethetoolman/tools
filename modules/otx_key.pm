@@ -28,6 +28,8 @@ sub init	{
         	option => "O",
         	name => "OTX KEY TOOL",
         	description => "Module for configuring your OTX api key",
+		module => "otx_key",
+		function => "start"
 	};
 	$main::data{config}{otx_key_file} = $ENV{"HOME"}."/.otx.api.key";
 }
