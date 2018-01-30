@@ -73,7 +73,7 @@ sub destroy()	{
 sub main()	{
 	ouut_menu('main');
         my $next = &ouut_menu_action('main',ouut_quest());
-        print $next;
+        $next->();
         # i need to execute the module::function that is returned from the above line.
 }
 
