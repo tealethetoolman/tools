@@ -35,9 +35,6 @@ sub init()	{
 	} else {
 		ouut(message => "Modules Path not found. Dying", source => 'main::init', severity => 'error', logo => 'X') and destroy();
 	}
-	modules::quit::init();
-	modules::otx_key::init();
-	modules::otx::init();
 	return 0;
 }
 
@@ -71,10 +68,12 @@ sub destroy()	{
 }
 
 sub main()	{
-	ouut_menu('main');
-        my $next = &ouut_menu_action('main',ouut_quest());
-        $next->();
-        # i need to execute the module::function that is returned from the above line.
+	while (true) 	{
+		my $next = ouut_menu('main');
+		$next->();
+#        	&$next;
+		#you can use either of those syntaxes.
+        }
 }
 
 

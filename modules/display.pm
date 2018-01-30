@@ -13,6 +13,7 @@ sub ouut_string	{
 	print shift;
 	print "\n";
 }
+
 sub ouut	{
 #	pass in our hash with info in it
 #	fields
@@ -119,6 +120,9 @@ sub ouut_menu 	{
 		my $menu_item = $_;
 		print "|-> ".$main::data{menu}{$which_menu}{$menu_item}{option}." : ".$main::data{menu}{$which_menu}{$menu_item}{name}."\n";
 	}
+	my $input = ouut_quest();
+	my $output = ouut_menu_action($which_menu,$input);
+	return $output;
 }
 
 sub ouut_menu_action	{
@@ -129,12 +133,16 @@ sub ouut_menu_action	{
 		my $menu_item = $_;
 		if ($main::data{menu}{$menu}{$menu_item}{option} =~ $menu_selection)	{
                     if ($main::data{menu}{$menu}{$menu_item}{trigger})   {
-                            $output = "modules::".$menu_item."::".$main::data{menu}{$menu}{$menu_item}{trigger}; 
+						$output = $main::data{menu}{$menu}{$menu_item}{trigger};
                     }
 		}
 	}
-	ouut(message => "You have selected an invalid option", source => "display::ouut_menu_action",logo=>"X") unless $output;
+ $output = \&ouut_menu_error unless $output;
 	return $output;
+}
+
+sub ouut_menu_error	{
+		ouut(message => "You have selected an invalid option", source => "display::ouut_menu_action",logo=>"X")
 }
 
 1;

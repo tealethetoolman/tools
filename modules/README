@@ -18,8 +18,7 @@ $main::data{menu}{main}{module} =    {
     option => "x",
     name => "MODULE",
     description => "use this to access your module",
-    trigger => "menu", # this points at the function that has your main menu in it.
-    module => "module" # put the module name that you defined the package as. this is for building and calling the menu
+    trigger => \&menu, # this points at the function that has your main menu in it.
 };
 
 #this is an example of a configuration menu
@@ -28,8 +27,7 @@ $main::data{menu}{module}	=	{
 		option => "l",
 		name => "logging options",
 		description => "this is how you configure the logging verbosity",
-		trigger => "configure",
-		module => "module"
+		trigger => \&config,
 	}
 }
 
@@ -59,6 +57,6 @@ my %data;
 use lib "modules/";
 use modules::module;
 
-$what_next = ouut-menu("main");
+$next = ouut-menu("main",ouut_quest());
+$next->();
 
-# still havent figured out what to do with what next, its supposed to come out as modules::module::function() so that you can just run the function with a variable name. I haven't done this yet because i got to a good stopping point where i thought making some good 

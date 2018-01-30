@@ -2,16 +2,13 @@ package modules::otx;
 use modules::display;
 use WWW::Curl::Easy;
 use Time::HiRes qw ( time );
-print " [+] - loading module OTX\n";
-sub init	{
-        $main::data{modules}{otx} =    {
-                option => "x",
-                name => "OTX",
-                description => "use this to configure otx",
-		trigger => "start",
-		module => "otx"
-        };
-}
+ouut(message => "loading module OTX",source => "modules::otx",severity => "debug",tab=>1, logo => "+");
+$main::data{menu}{main}{otx} =    {
+    option => "x",
+    name => "OTX",
+    description => "use this to configure otx",
+    trigger => \&start,
+    };
 sub start	{
 	print "[*] - Starting OTX\n";
         unless (&modules::otx_key::check_key_exists())  {
