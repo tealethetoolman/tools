@@ -5,7 +5,7 @@ $main::data{menu}{main}{ip_lookup} =    {
     option => "i",
     name => "IP_LOOKUP",
     description => "use this to look at your IP address",
-    trigger => \&menu,
+    trigger => "menu",
     module => "ip_lookup"
 };
 sub start	{
