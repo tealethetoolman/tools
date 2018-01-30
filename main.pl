@@ -38,7 +38,6 @@ sub init()	{
 	modules::quit::init();
 	modules::otx_key::init();
 	modules::otx::init();
-	modules::ip_lookup::init();
 	return 0;
 }
 
@@ -73,9 +72,8 @@ sub destroy()	{
 
 sub main()	{
 	ouut_menu('main');
-#	my $next_menu = ouut_quest();
-#	ouut(message => "you have selected ".$next_menu, source => "sub::main", logo => "+",severity => "info");
-	ouut(message => "you selected something that is wanting to trigger ".ouut_menu_action('main',ouut_quest()), source => "main", logo => "+");
+        &ouut_menu_action('main',ouut_quest());
+        # i need to execute the module::function that is returned from the above line.
 }
 
 

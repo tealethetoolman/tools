@@ -107,7 +107,6 @@ sub ouut_quest	{
 	$output .= "[?] - > ";
 	print $output;
 	my $input = <STDIN>;
-	print "\n";
 	chomp $input;
 	return $input;
 }
@@ -129,10 +128,13 @@ sub ouut_menu_action	{
 	for (keys $main::data{menu}{$menu})	{
 		my $menu_item = $_;
 		if ($main::data{menu}{$menu}{$menu_item}{option} =~ $menu_selection)	{
-			$output = "module::".$menu_item."::".$main::data{menu}{$menu}{$menu_item}{trigger}; 
+                    if ($main::data{menu}{$menu}{$menu_item}{trigger})   {
+                            $output = "modules::".$menu_item."::".$main::data{menu}{$menu}{$menu_item}{trigger}; 
+                    }
 		}
 	}
+	ouut(message => "You have selected an invalid option", source => "display::ouut_menu_action",logo=>"X") unless $output;
 	return $output;
-}	
+}
 
 1;
